@@ -157,6 +157,31 @@ p2
 * Almacena en formato **pdf** el gráfico resultante en un fichero denominado ``Ejercicio1.pdf``.
 
 ```{r Solucion ejercicio 1}
+#rm(list=ls())
+library(ggplot2)
+
+load("data/weatherAUS.RData")
+
+
+grafico1<-ggplot(data=ds,aes(x=MinTemp, y=MaxTemp)) +
+  geom_point()
+
+
+grafico2<-ggplot(data=ds,aes(x=MinTemp, y=MaxTemp, color=RainTomorrow)) +
+  geom_point() 
+
+
+grafico3 <- grafico2 +
+  labs(title="Dispersión de temperaturas: mínima vs. máxima")  
+
+
+ggsave(filename = "Ejercicio1.pdf", plot = grafico3, device = "pdf", width = 8, height = 6)
+
+
+print(grafico1)
+print(grafico2)
+print(grafico3)
+
 
 ggsave('figs/Ejercicio1.pdf')
 ```
@@ -169,8 +194,39 @@ ggsave('figs/Ejercicio1.pdf')
 * Añade títulos explicativos al gráfico anterior (debe aparece un título, subtítulo, leyendas e información de las variables representadas en los ejes). 
 * Almacena en formato **pdf** el gráfico resultante en un fichero denominado ``Ejercicio2.pdf``.
 
-```{r Solucion ejercicio 2}
+```{r }
 
+grafico_base <- ggplot(data = ds, aes(x = Temp9am, y = Pressure9am)) +
+  geom_point()
+
+# 2. Modifica el gráfico para incluir RainToday con la FORMA del punto
+# Almacenamos este resultado para compararlo más tarde.
+grafico_forma <- ggplot(data = ds, aes(x = Temp9am, y = Pressure9am, shape = RainToday)) +
+  geom_point()
+
+# 3. Modifica el gráfico para incluir RainToday con el COLOR del punto
+# Este será el gráfico que modificaremos más adelante (paso 4 y 5).
+grafico_color <- ggplot(data = ds, aes(x = Temp9am, y = Pressure9am, color = RainToday)) +
+  geom_point()
+
+# 4. Añade títulos explicativos al gráfico (usaremos 'grafico_color' ya que es el mejor)
+grafico_final <- grafico_color +
+  labs(
+    title = "Relación entre Temperatura y Presión a las 9 am",
+    subtitle = "Coloreado según si llovió (RainToday)",
+    x = "Temperatura a las 9 am (°C)",
+    y = "Presión Atmosférica a las 9 am (hPa)",
+    color = "Lluvia Hoy" # Leyenda para la variable 'color'
+  ) +
+  theme_minimal() # Opcional: mejora la estética
+
+# 5. Almacena en formato PDF el gráfico resultante (grafico_final)
+ggsave(filename = "Ejercicio2.pdf", plot = grafico_final, device = "pdf", width = 8, height = 6)
+
+# Opcional: Mostrar los gráficos para comparación
+print(grafico_forma)
+print(grafico_color)
+print(grafico_final)
 ggsave('figs/Ejercicio2.pdf')
 ```
 
