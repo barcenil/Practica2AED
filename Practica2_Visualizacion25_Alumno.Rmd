@@ -175,7 +175,7 @@ grafico3 <- grafico2 +
   labs(title="Dispersión de temperaturas: mínima vs. máxima")  
 
 
-ggsave(filename = "Ejercicio1.pdf", plot = grafico3, device = "pdf", width = 8, height = 6)
+ggsave(filename="Ejercicio1.pdf", plot=grafico3, device="pdf", width=8, height=6)
 
 
 print(grafico1)
@@ -194,39 +194,28 @@ ggsave('figs/Ejercicio1.pdf')
 * Añade títulos explicativos al gráfico anterior (debe aparece un título, subtítulo, leyendas e información de las variables representadas en los ejes). 
 * Almacena en formato **pdf** el gráfico resultante en un fichero denominado ``Ejercicio2.pdf``.
 
-```{r }
+```{r Solucion ejercicio 2}
+rm(list=ls())
+load("data/weatherAUS.RData")
 
-grafico_base <- ggplot(data = ds, aes(x = Temp9am, y = Pressure9am)) +
+grafico1<-ggplot(data=ds, aes(x=Temp9am, y=Pressure9am)) +
   geom_point()
 
-# 2. Modifica el gráfico para incluir RainToday con la FORMA del punto
-# Almacenamos este resultado para compararlo más tarde.
-grafico_forma <- ggplot(data = ds, aes(x = Temp9am, y = Pressure9am, shape = RainToday)) +
+grafico2<-ggplot(data=ds, aes(x=Temp9am, y=Pressure9am, shape=RainToday)) +
   geom_point()
 
-# 3. Modifica el gráfico para incluir RainToday con el COLOR del punto
-# Este será el gráfico que modificaremos más adelante (paso 4 y 5).
-grafico_color <- ggplot(data = ds, aes(x = Temp9am, y = Pressure9am, color = RainToday)) +
+grafico3<-ggplot(data=ds, aes(x=Temp9am, y=Pressure9am, color=RainToday)) +
   geom_point()
 
-# 4. Añade títulos explicativos al gráfico (usaremos 'grafico_color' ya que es el mejor)
-grafico_final <- grafico_color +
-  labs(
-    title = "Relación entre Temperatura y Presión a las 9 am",
-    subtitle = "Coloreado según si llovió (RainToday)",
-    x = "Temperatura a las 9 am (°C)",
-    y = "Presión Atmosférica a las 9 am (hPa)",
-    color = "Lluvia Hoy" # Leyenda para la variable 'color'
-  ) +
-  theme_minimal() # Opcional: mejora la estética
 
-# 5. Almacena en formato PDF el gráfico resultante (grafico_final)
-ggsave(filename = "Ejercicio2.pdf", plot = grafico_final, device = "pdf", width = 8, height = 6)
+grafico_final<-grafico1 + labs(title="Relación entre Temperatura y Presión a las 9 am", subtitle="Coloreado según si llovió (RainToday)", x="Temperatura a las 9 am (°C)", y="Presión Atmosférica a las 9 am (hPa)", color="Lluvia Hoy") 
 
-# Opcional: Mostrar los gráficos para comparación
-print(grafico_forma)
-print(grafico_color)
-print(grafico_final)
+
+ggsave(filename ="Ejercicio2.pdf",plot=grafico_final, device="pdf", width=8, height=6)
+
+print(grafico1)
+print(grafico2)
+print(grafico3)
 ggsave('figs/Ejercicio2.pdf')
 ```
 
@@ -242,8 +231,31 @@ ggsave('figs/Ejercicio2.pdf')
 * Almacena en formato **pdf** el gráfico resultante en un fichero denominado ``Ejercicio3.pdf``.
 
 ```{r Solucion ejercicio 3}
+rm(list=ls())
+library(ggplot2)
 
-ggsave('figs/Ejercicio3.pdf') # se almacena el último gráfico generado
+load("data/iris_tidy.RData") 
+
+str(iris.tidy) 
+
+iris.grafico1<-ggplot(data=iris.tidy, aes(x=Species, y=Value))+geom_point()
+iris.grafico1
+
+iris.grafico2<-ggplot(data=iris.tidy, aes(x=Species, y=Value, color=Part))+geom_point() 
+iris.grafico2
+
+iris.grafico3_filas<-iris.grafico2+facet_grid(Measure ~ .) 
+iris.grafico3_filas
+
+iris.grafico3_columnas<-iris.grafico2+facet_grid(. ~ Measure) 
+iris.grafico3_columnas
+
+iris.grafico4_jitter<-ggplot(data=iris.tidy,aes(x=Species, y=Value, color=Part)) +
+  geom_jitter(width=0.2, alpha=0.5)+ facet_grid(. ~ Measure) 
+iris.grafico4_jitter
+
+ggsave('figs/Ejercicio3.pdf') 
+
 ```
 
 ## Gráficos de línea con **ggplot2**
@@ -261,6 +273,7 @@ Dosis.Medicina2 <- data.frame(Complemento=rep(c("Vitamina A", "Vitamina C"), eac
                 Dosis=rep(c("D0.5mg", "D1mg", "D2mg"),2),
                 Efectividad=c(6.8, 15, 33, 4.2, 10, 29.5))
 head(Dosis.Medicina2)
+
 ```
 
 Vamos a representar en el eje $x$ la variable ``Dosis`` y en el eje $y$ la ``Efectividad`` del tratamiento. Puedes observar que estamos juntando dos capas, por una parte los puntos en el gráfico (**geom_point()**) y la línea (**geom_line()**). La opción `group` permite que se unan puntos consecutivos, en el gráfico de líneas, cuando las dos variables representadas no son ambas numéricas.
@@ -323,8 +336,14 @@ ggplot(data=Dosis.Medicina2, aes(x=Dosis, y=Efectividad, group=Complemento)) +
 * Modifica el gráfico anterior para que la tendencia de cada fabricante este trazada con un tipo de línea diferente.
 * Añade el siguiente título al gráfico *"Ventas mensuales de diferentes compañías tecnológicas"*.
 * Almacena en formato **pdf** el gráfico resultante en un fichero denominado ``Ejercicio4.pdf``.
+*Si quisiera cambiar las formas de los circulos a cuadrados de las lineas como sería
 
 ```{r Solucion ejercicio 4}
+rm(list=ls())
+library(ggplot2)
+load("data/Ejercicio4_Data.Rdata")
+grafico1<-ggplot(data=DatosEjer4, aes(x=Fecha, y=Ventas, color=Fabricante))+geom_point()
+grafico1
 
 ```
 
@@ -381,10 +400,14 @@ El fichero ``iceRiver.RData`` contiene información del caudal de dos ríos isla
   * Almacena en formato **pdf** el gráfico resultante en un fichero denominado ``Ejercicio5.pdf``.
 
 ```{r Solucion ejercicio 6 }
-
+library(latex2exp)
+rm(list=ls())
+load("data/iceRiver.RData")
+ggplot(data = ice.river.RData)
+ggplot(data=ice.river,df, aes(x=time()))
 
 ```
-
+#si no reorganizacion de los datos flujo y y color rio y x time, 
 
 ## Gráficos boxplot con **ggplot2**
 
